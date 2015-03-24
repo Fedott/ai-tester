@@ -1,0 +1,14 @@
+{
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "require": {
+    "symfony/console": "*",
+    "nategood/httpful": "0.2.*"
+  }
+}
