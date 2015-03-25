@@ -1,17 +1,19 @@
 #!/usr/bin/env php
 <?php
 
-use AI\Tester\Command\InfoCommand;
+use AI\Tester\Command\CreateUserCommand;
+use AI\Tester\Command\UserInfoCommand;
 use AI\Tester\Command\RandomActionCommand;
 use AI\Tester\Console\Application;
 
 require __DIR__.'/../vendor/autoload.php';
 
 $builder = new \DI\ContainerBuilder();
-//$builder->addDefinitions()
+$builder->addDefinitions(__DIR__.'/../config.php');
 $container = $builder->build();
 
 $application = new Application($container);
-$application->add(new InfoCommand());
+$application->add(new UserInfoCommand());
 $application->add(new RandomActionCommand());
+$application->add(new CreateUserCommand());
 $application->run();
