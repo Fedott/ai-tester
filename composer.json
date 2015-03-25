@@ -9,6 +9,8 @@
   },
   "require": {
     "symfony/console": "*",
-    "nategood/httpful": "0.2.*"
+    "nategood/httpful": "0.2.*",
+    "fzaninotto/faker": "~1.4",
+    "mnapoli/php-di": "~4.4"
   }
 }

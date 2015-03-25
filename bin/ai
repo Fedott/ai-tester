@@ -2,10 +2,16 @@
 <?php
 
 use AI\Tester\Command\InfoCommand;
-use Symfony\Component\Console\Application;
+use AI\Tester\Command\RandomActionCommand;
+use AI\Tester\Console\Application;
 
 require __DIR__.'/../vendor/autoload.php';
 
-$application = new Application();
+$builder = new \DI\ContainerBuilder();
+//$builder->addDefinitions()
+$container = $builder->build();
+
+$application = new Application($container);
 $application->add(new InfoCommand());
+$application->add(new RandomActionCommand());
 $application->run();
