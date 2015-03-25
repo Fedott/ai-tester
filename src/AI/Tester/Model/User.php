@@ -18,6 +18,7 @@ class User
 
     /**
      * @ODM\String
+     * @ODM\UniqueIndex
      *
      * @var string
      */
@@ -25,6 +26,7 @@ class User
 
     /**
      * @ODM\String
+     * @ODM\UniqueIndex
      *
      * @var string
      */

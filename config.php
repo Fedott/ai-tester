@@ -1,5 +1,6 @@
 <?php
 return [
+    'app.url' => 'http://symfony.fextbuy.local',
     'db.host' => '127.0.0.1',
     'db.database' => 'ai-tester',
     'doctrine.proxyDir' => __DIR__.'/cache/proxies',
@@ -29,5 +30,17 @@ return [
         ->method('setHydratorDir', DI\link('doctrine.hydratorDir'))
         ->method('setHydratorNamespace', DI\link('doctrine.hydratorNamespace'))
         ->method('setMetadataDriverImpl', DI\link('doctrine.annotationDriver'))
-        ->method('setDefaultDB', DI\link('db.database'))
+        ->method('setDefaultDB', DI\link('db.database')),
+
+    'http.client' => DI\factory(function (\DI\Container $c) {
+        return new \GuzzleHttp\Client([
+            'base_url' => $c->get('app.url'),
+            'defaults' => [
+                'exceptions' => false,
+                'headers' => [
+                    'Accept' => 'application/json'
+                ]
+            ],
+        ]);
+    }),
 ];
