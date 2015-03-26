@@ -5,7 +5,6 @@ namespace AI\Tester\Client;
 use AI\Tester\Model\Buy;
 use AI\Tester\Model\Param;
 use AI\Tester\Model\User;
-use DI\Annotation\Inject;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use GuzzleHttp\Client;
 use Monolog\Logger;
@@ -59,7 +58,7 @@ class API
                 $this->logger->addError("Register failed", [
                     $response->getStatusCode(),
                     $response->getHeaders(),
-                    $response->getBody()->getContents()
+                    $response->getBody()->getContents(),
                 ]);
             }
         } else {
@@ -98,7 +97,7 @@ class API
             $this->logger->addError("Login failed", [
                 $response->getStatusCode(),
                 $response->getHeaders(),
-                $response->getBody()->getContents()
+                $response->getBody()->getContents(),
             ]);
 
             return false;
@@ -113,6 +112,12 @@ class API
         $response = $this->client->get('/buys');
 
         if (200 != $response->getStatusCode()) {
+            $this->logger->addError("Get buys failed", [
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+
             return false;
         }
 
@@ -121,12 +126,49 @@ class API
         return Buy::parseAllFromJson($json);
     }
 
+    /**
+     * @param Buy $buy
+     * @return Buy
+     */
     public function rateUpBuy(Buy $buy)
     {
+        $this->changeBuyRate($buy, 'Up');
+
+        return $buy;
     }
 
+    /**
+     * @param Buy $buy
+     * @return Buy
+     */
     public function rateDownBuy(Buy $buy)
     {
+        $this->changeBuyRate($buy, 'Down');
+
+        return $buy;
+    }
+
+    /**
+     * @param Buy $buy
+     * @return bool
+     */
+    public function purchaseBuy(Buy $buy)
+    {
+        $url = "/buys/{$buy->id}/purchased";
+        $response = $this->client->post($url);
+
+        if (200 != $response->getStatusCode()) {
+            $this->logger->addError("Purchase buy failed", [
+                $buy,
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -141,6 +183,13 @@ class API
         );
 
         if (201 != $response->getStatusCode()) {
+            $this->logger->addError("Create buy failed", [
+                $buyData,
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+
             return false;
         }
 
@@ -148,7 +197,7 @@ class API
         return Buy::parseFromJson($json);
     }
 
-    public function deleteBuy($buy)
+    public function deleteBuy(Buy $buy)
     {
     }
 
@@ -156,15 +205,97 @@ class API
     {
     }
 
-    public function createParam($paramData)
+    /**
+     * @param Buy $buy
+     * @param array $paramData
+     * @return Param|bool
+     */
+    public function createParam(Buy $buy, array $paramData)
     {
+        $uri = "/buys/{$buy->id}/params";
+        $response = $this->client->post($uri, ['json' => $paramData]);
+
+        if (201 != $response->getStatusCode()) {
+            $this->logger->addError("Create param failed", [
+                $buy,
+                $paramData,
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+            return false;
+        }
+
+        $json = $response->json();
+        return Param::parseFromJson($json, $buy);
     }
 
+    /**
+     * @param Buy $buy
+     * @return Buy[]|bool
+     */
+    public function getParams(Buy $buy)
+    {
+        $uri = "/buys/{$buy->id}/params";
+        $response = $this->client->get($uri);
+
+        if (200 != $response->getStatusCode()) {
+            $this->logger->addError("Get buys failed", [
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+
+            return false;
+        }
+
+        $json = $response->json();
+
+        return Param::parseAllFromJson($json, $buy);
+    }
+
+    /**
+     * @param Param $param
+     * @return bool
+     */
     public function deleteParam(Param $param)
     {
+        $uri = "/buys/{$param->buy->id}/params/{$param->id}";
+        $response = $this->client->delete($uri);
+        if (204 != $response->getStatusCode()) {
+            $this->logger->addError("Login failed", [
+                $param,
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+
+            return false;
+        }
+
+        return true;
     }
 
     public function editParam(Param $param, $editedData)
     {
+    }
+
+    /**
+     * @param Buy $buy
+     * @param string $action
+     */
+    protected function changeBuyRate(Buy $buy, $action)
+    {
+        $response = $this->client->post('/buys/' . $buy->id . '/rate' . $action);
+
+        if (200 != $response->getStatusCode()) {
+            $this->logger->addError("Rate{$action} failed", [
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents(),
+            ]);
+        }
+
+        $buy->rating = $response->json()['rating'];
     }
 }
