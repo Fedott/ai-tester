@@ -5,7 +5,7 @@ namespace AI\Tester\Model;
 class Buy
 {
     public $id;
-    public $title;
+    public $target;
     public $price;
     public $rating;
 
@@ -23,7 +23,7 @@ class Buy
     {
         $buy = new Buy();
         $buy->id = $json['id'];
-        $buy->title = $json['title'];
+        $buy->target = $json['target'];
         $buy->price = $json['price'];
         $buy->rating = $json['rating'];
 

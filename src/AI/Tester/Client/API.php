@@ -8,6 +8,7 @@ use AI\Tester\Model\User;
 use DI\Annotation\Inject;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use GuzzleHttp\Client;
+use Monolog\Logger;
 
 class API
 {
@@ -22,6 +23,12 @@ class API
      * @var DocumentManager
      */
     protected $documentManager;
+
+    /**
+     * @Inject("logger.apiClient")
+     * @var Logger
+     */
+    protected $logger;
 
     /**
      * @var string
@@ -48,7 +55,15 @@ class API
                 $this->documentManager->flush();
 
                 return true;
+            } else {
+                $this->logger->addError("Register failed", [
+                    $response->getStatusCode(),
+                    $response->getHeaders(),
+                    $response->getBody()->getContents()
+                ]);
             }
+        } else {
+            $this->logger->addWarning("User already registered", [$user]);
         }
 
         return false;
@@ -80,6 +95,12 @@ class API
 
             return true;
         } else {
+            $this->logger->addError("Login failed", [
+                $response->getStatusCode(),
+                $response->getHeaders(),
+                $response->getBody()->getContents()
+            ]);
+
             return false;
         }
     }

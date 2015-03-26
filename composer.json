@@ -12,6 +12,7 @@
     "fzaninotto/faker": "~1.4",
     "mnapoli/php-di": "~4.4",
     "doctrine/mongodb-odm": "1.0.*@dev",
-    "guzzlehttp/guzzle": "~5.0"
+    "guzzlehttp/guzzle": "~5.0",
+    "monolog/monolog": "~1.13"
   }
 }

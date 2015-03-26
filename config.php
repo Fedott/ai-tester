@@ -3,6 +3,8 @@ return [
     'app.url' => 'http://symfony.fextbuy.local',
     'db.host' => '127.0.0.1',
     'db.database' => 'ai-tester',
+    'log.apiClient.path' => __DIR__.'/logs/apiClient.log',
+    'log.apiClient.level' => \Monolog\Logger::DEBUG,
     'doctrine.proxyDir' => __DIR__.'/cache/proxies',
     'doctrine.proxyNamespace' => 'Proxies',
     'doctrine.hydratorDir' => __DIR__.'/cache/hydrators',
@@ -42,5 +44,17 @@ return [
                 ]
             ],
         ]);
+    }),
+
+    'logger.apiClient' => DI\factory(function (\DI\Container $c) {
+        return new \Monolog\Logger(
+            "apiClient",
+            [
+                new \Monolog\Handler\StreamHandler(
+                    $c->get('log.apiClient.path'),
+                    $c->get('log.apiClient.level')
+                )
+            ]
+        );
     }),
 ];

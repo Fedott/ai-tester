@@ -46,6 +46,10 @@ class UserActionCommand extends Command
             if ($value == '{{user}}') {
                 $value = $user;
             }
+            $json = json_decode($value, true);
+            if (null !== $json) {
+                $value = $json;
+            }
 
             $parsedData[] = $value;
         }
