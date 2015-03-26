@@ -2,6 +2,8 @@
 
 namespace AI\Tester\Client;
 
+use AI\Tester\Model\Buy;
+use AI\Tester\Model\Param;
 use AI\Tester\Model\User;
 use DI\Annotation\Inject;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -74,6 +76,7 @@ class API
         if ($response->getStatusCode() == 200) {
             $accessToken = $response->json()['access_token'];
             $this->accessToken = $accessToken;
+            $this->client->setDefaultOption('headers/Authorization', 'Bearer ' . $this->accessToken);
 
             return true;
         } else {
@@ -81,27 +84,54 @@ class API
         }
     }
 
+    /**
+     * @return Buy[]|bool
+     */
     public function getBuys()
     {
+        $response = $this->client->get('/buys');
+
+        if (200 != $response->getStatusCode()) {
+            return false;
+        }
+
+        $json = $response->json();
+
+        return Buy::parseAllFromJson($json);
     }
 
-    public function rateUpBuy($buy)
+    public function rateUpBuy(Buy $buy)
     {
     }
 
-    public function rateDownBuy($buy)
+    public function rateDownBuy(Buy $buy)
     {
     }
 
+    /**
+     * @param array $buyData
+     * @return Buy|bool
+     */
     public function createBuy($buyData)
     {
+        $response = $this->client->post(
+            '/buys',
+            ['json' => $buyData]
+        );
+
+        if (201 != $response->getStatusCode()) {
+            return false;
+        }
+
+        $json = $response->json();
+        return Buy::parseFromJson($json);
     }
 
     public function deleteBuy($buy)
     {
     }
 
-    public function editBuy($buy, $editedData)
+    public function editBuy(Buy $buy, $editedData)
     {
     }
 
@@ -109,11 +139,11 @@ class API
     {
     }
 
-    public function deleteParam($param)
+    public function deleteParam(Param $param)
     {
     }
 
-    public function editParam($param, $editedData)
+    public function editParam(Param $param, $editedData)
     {
     }
 }

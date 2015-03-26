@@ -2,6 +2,7 @@
 <?php
 
 use AI\Tester\Command\CreateUserCommand;
+use AI\Tester\Command\UserActionCommand;
 use AI\Tester\Command\UserInfoCommand;
 use AI\Tester\Command\RandomActionCommand;
 use AI\Tester\Console\Application;
@@ -18,15 +19,14 @@ $helperSet->set($container->get(\AI\Tester\Console\DocumentManagerHelper::class)
 $application = new Application($container);
 $application->setHelperSet($helperSet);
 
-$application->add(new UserInfoCommand());
-$application->add(new RandomActionCommand());
-$application->add(new CreateUserCommand());
+$application->addCommands([
+    new UserInfoCommand(),
+    new RandomActionCommand(),
+    new CreateUserCommand(),
+    new UserActionCommand(),
+]);
 
 $application->addCommands(array(
-    new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateDocumentsCommand(),
-    new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand(),
-    new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateProxiesCommand(),
-    new \Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateRepositoriesCommand(),
     new \Doctrine\ODM\MongoDB\Tools\Console\Command\QueryCommand(),
     new \Doctrine\ODM\MongoDB\Tools\Console\Command\ClearCache\MetadataCommand(),
     new \Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\CreateCommand(),
