@@ -4,10 +4,12 @@ namespace AI\Tester\Command;
 
 use AI\Tester\Client\API;
 use AI\Tester\Console\Command;
+use AI\Tester\Logger\ConsoleOutputHandler;
 use AI\Tester\Model\User;
 use AI\Tester\Strategy\CreateBuyStrategy;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Exception;
+use Monolog\Logger;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,6 +34,10 @@ class RandomActionCommand extends Command
         if (!$user) {
             throw new Exception('User not found');
         }
+
+        /** @var Logger $logger */
+        $logger = $this->getContainer()->get('logger.strategy');
+        $logger->pushHandler(new ConsoleOutputHandler($output));
 
         /** @var CreateBuyStrategy $strategy */
         $strategy = $this->getContainer()->get(CreateBuyStrategy::class);

@@ -28,15 +28,15 @@ class CreateBuyStrategy implements StrategyInterface
 
     public function run(User $user)
     {
-        $this->logger->addInfo("User Login");
-        $this->apiClient->login($user);
+        $result = $this->apiClient->login($user);
+        $this->logger->addInfo("User Login", [$result]);
 
         $buy = [
             'target' => $this->faker->word,
             'price' => $this->faker->randomNumber(),
         ];
 
-        $this->logger->addInfo("Create buy");
-        $this->apiClient->createBuy($buy);
+        $result = $this->apiClient->createBuy($buy);
+        $this->logger->addInfo("Create buy", [$result]);
     }
 }

@@ -62,7 +62,7 @@ return [
 
     'logger.strategy' => DI\factory(function (\DI\Container $c) {
         return new \Monolog\Logger(
-            "apiClient",
+            "strategy",
             [
                 new \Monolog\Handler\StreamHandler(
                     $c->get('log.strategy.path'),
