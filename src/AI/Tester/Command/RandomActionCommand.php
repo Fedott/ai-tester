@@ -5,6 +5,7 @@ namespace AI\Tester\Command;
 use AI\Tester\Client\API;
 use AI\Tester\Console\Command;
 use AI\Tester\Model\User;
+use AI\Tester\Strategy\CreateBuyStrategy;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Exception;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,18 +27,16 @@ class RandomActionCommand extends Command
     {
         $username = $input->getArgument('username');
 
+        /** @var User|null $user */
         $user = $this->getUserRepository()->findOneBy(array('username' => $username));
         if (!$user) {
             throw new Exception('User not found');
         }
 
-        /** @var API $apiClient */
-        $apiClient = $this->getContainer()->get(API::class);
-
-//        $result = $apiClient->register($user);
-//        $output->writeln(sprintf("Register failed: %s", $result?"true":"false"));
-
-        $result = $apiClient->login($user);
-        $output->writeln(sprintf("Login failed: %s", $result?"true":"false"));
+        /** @var CreateBuyStrategy $strategy */
+        $strategy = $this->getContainer()->get(CreateBuyStrategy::class);
+        if ($strategy->validForUser($user)) {
+            $strategy->run($user);
+        }
     }
 }
