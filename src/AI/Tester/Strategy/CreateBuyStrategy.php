@@ -9,7 +9,7 @@ class CreateBuyStrategy extends AbstractStrategy
     /**
      * @var int
      */
-    protected $priority = 2;
+    protected $priority = 100;
 
     /**
      * @return string

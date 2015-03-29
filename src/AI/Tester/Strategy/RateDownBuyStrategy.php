@@ -4,19 +4,19 @@ namespace AI\Tester\Strategy;
 
 use AI\Tester\Model\User;
 
-class RateUpBuyStrategy extends AbstractStrategy
+class RateDownBuyStrategy extends AbstractStrategy
 {
     /**
      * @var int
      */
-    protected $priority = 1000;
+    protected $priority = 300;
 
     /**
      * @return string
      */
     public function getName()
     {
-        return 'Rate up buy strategy';
+        return 'Rate down buy strategy';
     }
 
     /**
@@ -53,11 +53,11 @@ class RateUpBuyStrategy extends AbstractStrategy
 
         $randomBuy = $buys[array_rand($buys)];
 
-        if (!$this->apiClient->rateUpBuy($randomBuy)) {
-            $this->logger->addError("Rate up buy failed", [$user, $randomBuy]);
+        if (!$this->apiClient->rateDownBuy($randomBuy)) {
+            $this->logger->addError("Rate down buy failed", [$user, $randomBuy]);
             return false;
         }
-        $this->logger->addInfo("Rate up buy success");
+        $this->logger->addInfo("Rate down buy success");
 
         return true;
     }
