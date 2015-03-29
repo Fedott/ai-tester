@@ -81,7 +81,8 @@ return [
 
     'strategy.list' => DI\factory(function (\DI\Container $c) {
         return [
-            ['priority' => 2, 'strategy' => $c->get(\AI\Tester\Strategy\CreateBuyStrategy::class)],
+            $c->get(\AI\Tester\Strategy\CreateBuyStrategy::class),
+            $c->get(\AI\Tester\Strategy\RateUpBuyStrategy::class),
         ];
     }),
 ];

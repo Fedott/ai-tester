@@ -42,7 +42,7 @@ class RandomActionCommand extends Command
         /** @var StrategyManager $strategyManager */
         $strategyManager = $this->getContainer()->get('strategy.manager');
         /** @var StrategyInterface $strategy */
-        $strategy = $strategyManager->getRandomStrategyWithPriorities();
+        $strategy = $strategyManager->getRandomStrategyForUser($user);
         if ($strategy->validForUser($user)) {
             $strategy->run($user);
         }

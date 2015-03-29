@@ -3,6 +3,7 @@
 namespace AI\Tester\Strategy;
 
 use AI\Tester\Model\User;
+use AI\Tester\Util\Randomizer;
 use DI\Annotation\Inject;
 
 class StrategyManager
@@ -51,13 +52,11 @@ class StrategyManager
     {
         $this->randomizer->reset();
 
-        if (null === $user) {
-            $this->randomizer->addVariants($this->strategies, 'strategy');
-        } else {
-            foreach ($this->strategies as $strategy) {
-                if ($strategy['strategy']->validForUser($user)) {
-                    $this->randomizer->addVariant($strategy['strategy'], $strategy['priority']);
-                }
+        foreach ($this->strategies as $strategy) {
+            if (null !== $user && $strategy->validForUser($user)) {
+                $this->randomizer->addVariant($strategy, $strategy->getPriority());
+            } else {
+                $this->randomizer->addVariant($strategy, $strategy->getPriority());
             }
         }
     }

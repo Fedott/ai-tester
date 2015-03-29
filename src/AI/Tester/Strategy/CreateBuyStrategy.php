@@ -3,20 +3,26 @@
 namespace AI\Tester\Strategy;
 
 use AI\Tester\Model\User;
-use DI\Annotation\Inject;
-use Faker\Generator;
-use AI\Tester\Client\API;
 
-class CreateBuyStrategy implements StrategyInterface
+class CreateBuyStrategy extends AbstractStrategy
 {
-    use StrategyTrait;
+    /**
+     * @var int
+     */
+    protected $priority = 2;
 
     /**
-     * @Inject("faker")
-     * @var Generator
+     * @return string
      */
-    protected $faker;
+    public function getName()
+    {
+        return 'Create buy strategy';
+    }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function validForUser(User $user)
     {
         if (!$user->registered) {
@@ -26,6 +32,10 @@ class CreateBuyStrategy implements StrategyInterface
         return true;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function run(User $user)
     {
         $result = $this->apiClient->login($user);
@@ -38,5 +48,7 @@ class CreateBuyStrategy implements StrategyInterface
 
         $result = $this->apiClient->createBuy($buy);
         $this->logger->addInfo("Create buy", [$result]);
+
+        return true;
     }
 }

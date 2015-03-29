@@ -1,6 +1,6 @@
 <?php
 
-namespace AI\Tester\Strategy;
+namespace AI\Tester\Util;
 
 class Randomizer
 {
