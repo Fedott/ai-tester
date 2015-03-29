@@ -85,6 +85,7 @@ return [
             $c->get(\AI\Tester\Strategy\RateUpBuyStrategy::class),
             $c->get(\AI\Tester\Strategy\RateDownBuyStrategy::class),
             $c->get(\AI\Tester\Strategy\PurchaseBuyStrategy::class),
+            $c->get(\AI\Tester\Strategy\RegisterUserStrategy::class),
         ];
     }),
 ];
