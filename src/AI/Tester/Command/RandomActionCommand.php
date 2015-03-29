@@ -6,6 +6,8 @@ use AI\Tester\Console\Command;
 use AI\Tester\Logger\ConsoleOutputHandler;
 use AI\Tester\Model\User;
 use AI\Tester\Strategy\CreateBuyStrategy;
+use AI\Tester\Strategy\StrategyInterface;
+use AI\Tester\Strategy\StrategyManager;
 use Exception;
 use Monolog\Logger;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,8 +39,10 @@ class RandomActionCommand extends Command
         $logger = $this->getContainer()->get('logger.strategy');
         $logger->pushHandler(new ConsoleOutputHandler($output));
 
-        /** @var CreateBuyStrategy $strategy */
-        $strategy = $this->getContainer()->get(CreateBuyStrategy::class);
+        /** @var StrategyManager $strategyManager */
+        $strategyManager = $this->getContainer()->get('strategy.manager');
+        /** @var StrategyInterface $strategy */
+        $strategy = $strategyManager->getRandomStrategyWithPriorities();
         if ($strategy->validForUser($user)) {
             $strategy->run($user);
         }

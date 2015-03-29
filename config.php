@@ -75,4 +75,13 @@ return [
     'faker' => DI\factory(function() {
         return Faker\Factory::create();
     }),
+
+    'strategy.manager' => DI\object(AI\Tester\Strategy\StrategyManager::class)
+        ->method('setStrategies', DI\link('strategy.list')),
+
+    'strategy.list' => DI\factory(function (\DI\Container $c) {
+        return [
+            ['priority' => 2, 'strategy' => $c->get(\AI\Tester\Strategy\CreateBuyStrategy::class)],
+        ];
+    }),
 ];

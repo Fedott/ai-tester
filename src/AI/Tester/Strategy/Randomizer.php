@@ -9,6 +9,11 @@ class Randomizer
      */
     protected $variants = [];
 
+    public function reset()
+    {
+        $this->variants = [];
+    }
+
     /**
      * @param mixed $item
      * @param int $priority
@@ -21,11 +26,13 @@ class Randomizer
 
     /**
      * @param array $variants
+     * @param string $itemName
+     * @param string $priorityName
      */
-    public function addVariants(array $variants)
+    public function addVariants(array $variants, $itemName = 'item', $priorityName = 'priority')
     {
         foreach ($variants as $variant) {
-            $this->addVariant($variant['item'], $variant['priority']);
+            $this->addVariant($variant[$itemName], $variant[$priorityName]);
         }
     }
 
@@ -34,6 +41,6 @@ class Randomizer
      */
     public function getRandomVariant()
     {
-        return array_rand($this->variants);
+        return $this->variants[array_rand($this->variants)];
     }
 }
