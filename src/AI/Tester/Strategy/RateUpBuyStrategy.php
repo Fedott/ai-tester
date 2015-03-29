@@ -38,6 +38,8 @@ class RateUpBuyStrategy extends AbstractStrategy
      */
     public function run(User $user)
     {
+        $this->logger->addInfo("Start strategy: {$this->getName()}");
+
         if (!$this->apiClient->login($user)) {
             $this->logger->addError("User login failed");
             return false;

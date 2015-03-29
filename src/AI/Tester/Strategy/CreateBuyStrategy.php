@@ -9,7 +9,7 @@ class CreateBuyStrategy extends AbstractStrategy
     /**
      * @var int
      */
-    protected $priority = 100;
+    protected $priority = 50;
 
     /**
      * @return string
@@ -38,6 +38,8 @@ class CreateBuyStrategy extends AbstractStrategy
      */
     public function run(User $user)
     {
+        $this->logger->addInfo("Start strategy: {$this->getName()}");
+
         $result = $this->apiClient->login($user);
         $this->logger->addInfo("User Login", [$result]);
 
