@@ -2,12 +2,10 @@
 
 namespace AI\Tester\Command;
 
-use AI\Tester\Client\API;
 use AI\Tester\Console\Command;
 use AI\Tester\Logger\ConsoleOutputHandler;
 use AI\Tester\Model\User;
 use AI\Tester\Strategy\CreateBuyStrategy;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Exception;
 use Monolog\Logger;
 use Symfony\Component\Console\Input\InputArgument;
