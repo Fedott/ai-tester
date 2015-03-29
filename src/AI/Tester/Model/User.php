@@ -45,4 +45,11 @@ class User
      * @var bool
      */
     public $registered = false;
+
+    /**
+     * @ODM\Increment
+     *
+     * @var int
+     */
+    public $buysCount = 0;
 }

@@ -5,6 +5,7 @@ namespace AI\Tester\Client;
 use AI\Tester\Model\Buy;
 use AI\Tester\Model\Param;
 use AI\Tester\Model\User;
+use DI\Annotation\Inject;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use GuzzleHttp\Client;
 use Monolog\Logger;
@@ -34,6 +35,11 @@ class API
      */
     protected $accessToken;
 
+    /**
+     * @var User
+     */
+    protected $loggedUser;
+
     public function register(User $user)
     {
         if (!$user->registered) {
@@ -50,8 +56,7 @@ class API
 
             if ($response->getStatusCode() == 201) {
                 $user->registered = true;
-                $this->documentManager->persist($user);
-                $this->documentManager->flush();
+                $this->saveUser($user);
 
                 return true;
             } else {
@@ -91,6 +96,8 @@ class API
             $accessToken = $response->json()['access_token'];
             $this->accessToken = $accessToken;
             $this->client->setDefaultOption('headers/Authorization', 'Bearer ' . $this->accessToken);
+
+            $this->loggedUser = $user;
 
             return true;
         } else {
@@ -168,6 +175,9 @@ class API
             return false;
         }
 
+        $this->loggedUser->buysCount--;
+        $this->saveUser($this->loggedUser);
+
         return true;
     }
 
@@ -192,6 +202,9 @@ class API
 
             return false;
         }
+
+        $this->loggedUser->buysCount++;
+        $this->saveUser($this->loggedUser);
 
         $json = $response->json();
         return Buy::parseFromJson($json);
@@ -297,5 +310,14 @@ class API
         }
 
         $buy->rating = $response->json()['rating'];
+    }
+
+    /**
+     * @param User $user
+     */
+    protected function saveUser(User $user)
+    {
+        $this->documentManager->persist($user);
+        $this->documentManager->flush();
     }
 }

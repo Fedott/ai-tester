@@ -33,6 +33,7 @@ class UserInfoCommand extends Command
                 "Email: {$user->email}",
                 "Password: {$user->password}",
                 sprintf("Registered: %s", $user->registered?"true":"false"),
+                "Buys count: {$user->buysCount}",
             ));
         } else {
             $output->writeln("<error>User not found</error>");
