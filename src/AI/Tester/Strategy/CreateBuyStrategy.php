@@ -34,23 +34,18 @@ class CreateBuyStrategy extends AbstractStrategy
 
     /**
      * @param User $user
-     * @return bool
      */
     public function run(User $user)
     {
         $this->logger->addInfo("Start strategy: {$this->getName()}");
 
-        $result = $this->apiClient->login($user);
-        $this->logger->addInfo("User Login", [$result]);
+        $this->processUserLogin($user);
 
         $buy = [
             'target' => $this->faker->word,
             'price' => $this->faker->randomNumber(),
         ];
 
-        $result = $this->apiClient->createBuy($buy);
-        $this->logger->addInfo("Create buy", [$result]);
-
-        return true;
+        $this->processCreateBuy($buy);
     }
 }

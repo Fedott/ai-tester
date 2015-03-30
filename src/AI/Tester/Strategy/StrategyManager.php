@@ -53,9 +53,7 @@ class StrategyManager
         $this->randomizer->reset();
 
         foreach ($this->strategies as $strategy) {
-            if (null !== $user && $strategy->validForUser($user)) {
-                $this->randomizer->addVariant($strategy, $strategy->getPriority());
-            } else {
+            if (null === $user || $strategy->validForUser($user)) {
                 $this->randomizer->addVariant($strategy, $strategy->getPriority());
             }
         }

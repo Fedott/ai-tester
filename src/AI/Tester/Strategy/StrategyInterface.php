@@ -14,7 +14,7 @@ interface StrategyInterface
 
     /**
      * @param User $user
-     * @return bool
+     * @throws StrategyException
      */
     public function run(User $user);
 
