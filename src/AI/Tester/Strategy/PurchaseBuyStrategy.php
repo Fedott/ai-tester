@@ -2,7 +2,10 @@
 
 namespace AI\Tester\Strategy;
 
+use AI\Tester\Model\Buy;
 use AI\Tester\Model\User;
+use AI\Tester\Util\Randomizer;
+use DI\Annotation\Inject;
 
 class PurchaseBuyStrategy extends AbstractStrategy
 {
@@ -10,6 +13,12 @@ class PurchaseBuyStrategy extends AbstractStrategy
      * @var int
      */
     protected $priority = 40;
+
+    /**
+     * @Inject
+     * @var Randomizer
+     */
+    protected $randomizer;
 
     /**
      * @return string
@@ -44,8 +53,30 @@ class PurchaseBuyStrategy extends AbstractStrategy
 
         $buys = $this->processGetBuys($user);
 
-        $randomBuy = $buys[array_rand($buys)];
+        $randomBuy = $this->getRandomBuy($buys);
 
         $this->processPurchaseBuy($user, $randomBuy);
+    }
+
+    /**
+     * @param Buy[] $buys
+     * @return Buy
+     */
+    protected function getRandomBuy($buys)
+    {
+        $this->prepareRandomizer($buys);
+
+        return $this->randomizer->getRandomVariant();
+    }
+
+    /**
+     * @param Buy[] $buys
+     */
+    protected function prepareRandomizer(array $buys)
+    {
+        $this->randomizer->reset();
+        foreach ($buys as $buy) {
+            $this->randomizer->addVariant($buy, $buy->rating);
+        }
     }
 }

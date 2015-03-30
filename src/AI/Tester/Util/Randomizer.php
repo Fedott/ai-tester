@@ -2,6 +2,11 @@
 
 namespace AI\Tester\Util;
 
+use DI\Annotation\Injectable;
+
+/**
+ * @Injectable(scope="prototype")
+ */
 class Randomizer
 {
     /**
