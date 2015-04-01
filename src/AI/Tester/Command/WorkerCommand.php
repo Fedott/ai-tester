@@ -40,6 +40,11 @@ class WorkerCommand extends Command
      */
     protected $worker;
 
+    /**
+     * @var bool
+     */
+    protected $stopSignal = false;
+
     protected function configure()
     {
         $this
@@ -57,6 +62,13 @@ class WorkerCommand extends Command
         $this->setWorkerStatus(Worker::STATUS_READY);
 
         while (1) {
+            pcntl_signal_dispatch();
+            if ($this->stopSignal) {
+                $this->logger->addDebug("Stopping signal");
+                $output->writeln("Worker stopping");
+                break;
+            }
+
             $this->logger->debug("Circle", [time()]);
             $this->reloadWorker();
 
@@ -89,11 +101,19 @@ class WorkerCommand extends Command
 
     protected function initEnvironment()
     {
+        pcntl_signal(SIGTERM, [$this, 'stopCommand']);
+        pcntl_signal(SIGINT, [$this, 'stopCommand']);
+
         $this->logger = $this->getContainer()->get('logger.worker');
         $this->documentManager = $this->getDocumentManager();
         $this->workerRepository = $this->documentManager->getRepository(Worker::class);
         $this->strategyManager = $this->getStrategyManager();
         $this->worker = new Worker();
+    }
+
+    public function stopCommand()
+    {
+        $this->stopSignal = true;
     }
 
     /**
