@@ -4,6 +4,7 @@ namespace AI\Tester\Console;
 
 use AI\Tester\Client\API;
 use AI\Tester\Model\User;
+use AI\Tester\Strategy\StrategyManager;
 use DI\Container;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\DocumentRepository;
@@ -64,5 +65,16 @@ class Command extends BaseCommand
     protected function getApiClient()
     {
         return $this->getContainer()->get(API::class);
+    }
+
+    /**
+     * @return StrategyManager
+     * @throws \DI\NotFoundException
+     */
+    protected function getStrategyManager()
+    {
+        $strategyManager = $this->getContainer()->get('strategy.manager');
+
+        return $strategyManager;
     }
 }

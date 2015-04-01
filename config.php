@@ -7,6 +7,8 @@ return [
     'log.apiClient.level' => \Monolog\Logger::DEBUG,
     'log.strategy.path' => __DIR__.'/logs/strategy.log',
     'log.strategy.level' => \Monolog\Logger::DEBUG,
+    'log.worker.path' => __DIR__.'/logs/worker.log',
+    'log.worker.level' => \Monolog\Logger::DEBUG,
     'doctrine.proxyDir' => __DIR__.'/cache/proxies',
     'doctrine.proxyNamespace' => 'Proxies',
     'doctrine.hydratorDir' => __DIR__.'/cache/hydrators',
@@ -67,6 +69,18 @@ return [
                 new \Monolog\Handler\StreamHandler(
                     $c->get('log.strategy.path'),
                     $c->get('log.strategy.level')
+                )
+            ]
+        );
+    }),
+
+    'logger.worker' => DI\factory(function (\DI\Container $c) {
+        return new \Monolog\Logger(
+            "worker",
+            [
+                new \Monolog\Handler\StreamHandler(
+                    $c->get('log.worker.path'),
+                    $c->get('log.worker.level')
                 )
             ]
         );

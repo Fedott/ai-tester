@@ -42,8 +42,7 @@ class RandomActionCommand extends Command
         $logger = $this->getContainer()->get('logger.strategy');
         $logger->pushHandler(new ConsoleOutputHandler($output));
 
-        /** @var StrategyManager $strategyManager */
-        $strategyManager = $this->getContainer()->get('strategy.manager');
+        $strategyManager = $this->getStrategyManager();
 
         for ($i = 0; $i < $count; $i++) {
             /** @var StrategyInterface $strategy */

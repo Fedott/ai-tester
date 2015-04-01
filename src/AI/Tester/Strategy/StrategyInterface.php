@@ -10,7 +10,7 @@ interface StrategyInterface
      * @param User $user
      * @return bool
      */
-    public function validForUser(User $user);
+    public function validForUser(User $user = null);
 
     /**
      * @param User $user

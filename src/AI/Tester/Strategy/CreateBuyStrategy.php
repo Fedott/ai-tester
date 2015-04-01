@@ -23,13 +23,13 @@ class CreateBuyStrategy extends AbstractStrategy
      * @param User $user
      * @return bool
      */
-    public function validForUser(User $user)
+    public function validForUser(User $user = null)
     {
-        if (!$user->registered) {
-            return false;
+        if (null !== $user && $user->registered) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**

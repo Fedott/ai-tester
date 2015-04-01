@@ -5,6 +5,7 @@ use AI\Tester\Command\CreateUserCommand;
 use AI\Tester\Command\UserActionCommand;
 use AI\Tester\Command\UserInfoCommand;
 use AI\Tester\Command\RandomActionCommand;
+use AI\Tester\Command\WorkerCommand;
 use AI\Tester\Console\Application;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -24,6 +25,7 @@ $application->addCommands([
     new RandomActionCommand(),
     new CreateUserCommand(),
     new UserActionCommand(),
+    new WorkerCommand(),
 ]);
 
 $application->addCommands(array(

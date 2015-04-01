@@ -23,7 +23,7 @@ class RegisterUserStrategy extends AbstractStrategy
      * @param User $user
      * @return bool
      */
-    public function validForUser(User $user)
+    public function validForUser(User $user = null)
     {
         return true;
     }
@@ -32,14 +32,14 @@ class RegisterUserStrategy extends AbstractStrategy
      * @param User $user
      * @return bool
      */
-    public function run(User $user)
+    public function run(User $user = null)
     {
         $newUser = new User();
         $newUser->username = $this->faker->userName;
         $newUser->email = $this->faker->email;
         $newUser->password = rand(12345678, 87654321);
 
-        if (!$this->apiClient->register($user)) {
+        if (!$this->apiClient->register($newUser)) {
             $this->logger->addError("Register user failed");
             return false;
         }

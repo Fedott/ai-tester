@@ -32,9 +32,9 @@ class PurchaseBuyStrategy extends AbstractStrategy
      * @param User $user
      * @return bool
      */
-    public function validForUser(User $user)
+    public function validForUser(User $user = null)
     {
-        if ($user->registered && $user->buysCount > 3) {
+        if (null !== $user && $user->registered && $user->buysCount > 3) {
             return true;
         }
 
@@ -76,7 +76,8 @@ class PurchaseBuyStrategy extends AbstractStrategy
     {
         $this->randomizer->reset();
         foreach ($buys as $buy) {
-            $this->randomizer->addVariant($buy, $buy->rating);
+            $priority = ($buy->rating >= 0)?$buy->rating:1;
+            $this->randomizer->addVariant($buy, $priority);
         }
     }
 }

@@ -11,9 +11,9 @@ abstract class AbstractChangeRateBuyStrategy extends AbstractStrategy
      * @param User $user
      * @return bool
      */
-    public function validForUser(User $user)
+    public function validForUser(User $user = null)
     {
-        if ($user->registered && $user->buysCount > 0) {
+        if (null !== $user && $user->registered && $user->buysCount > 0) {
             return true;
         }
 
