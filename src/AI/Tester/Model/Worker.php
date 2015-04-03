@@ -47,8 +47,24 @@ class Worker
      */
     public $task = false;
 
+    /**
+     * @ODM\Increment
+     *
+     * @var int
+     */
+    public $countRuns = 0;
+
     public function updateLastActivity()
     {
         $this->lastActiveTime = time();
+    }
+
+    public function isOnline()
+    {
+        if (time() - $this->lastActiveTime > 3) {
+            return false;
+        }
+
+        return true;
     }
 }

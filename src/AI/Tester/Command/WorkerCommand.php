@@ -79,7 +79,7 @@ class WorkerCommand extends Command
 
             if ($this->worker->task) {
                 $this->logger->addDebug("Task found");
-                $this->setWorkerStatus(Worker::STATUS_WORK);
+                $this->setWorkerStatus(Worker::STATUS_WORK, true);
 
                 /** @var StrategyInterface $strategy */
                 /** @var User $user */
@@ -118,11 +118,15 @@ class WorkerCommand extends Command
 
     /**
      * @param int $status
+     * @param bool $countIncrement
      */
-    protected function setWorkerStatus($status)
+    protected function setWorkerStatus($status, $countIncrement = false)
     {
         $this->worker->updateLastActivity();
         $this->worker->status = $status;
+        if ($countIncrement) {
+            $this->worker->countRuns++;
+        }
 
         $this->documentManager->persist($this->worker);
         $this->documentManager->flush();
