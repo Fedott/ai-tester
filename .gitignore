@@ -2,3 +2,4 @@ vendor
 .idea
 cache/
 logs/
+docker/sources.tar.bz2
