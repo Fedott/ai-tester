@@ -70,6 +70,8 @@ class ManagerCommand extends StoppableCommand
 
             $this->activityUpdate();
 
+            $this->monitorWorkers();
+
             $this->reloadManager();
             $this->syncWorkerCount($this->manager->countWorkers);
 
@@ -87,6 +89,16 @@ class ManagerCommand extends StoppableCommand
         $this->documentManager = $this->getDocumentManager();
         $this->managerRepository = $this->documentManager->getRepository(Manager::class);
         $this->manager = new Manager();
+    }
+
+    protected function monitorWorkers()
+    {
+        foreach ($this->workers as $num => $processWorker) {
+            if (!$processWorker->isRunning()) {
+                $this->logger->addError("WORKER PROCESS BROKEN", [$processWorker->getOutput(), $processWorker->getErrorOutput()]);
+                unset ($this->workers[$num]);
+            }
+        }
     }
 
     /**

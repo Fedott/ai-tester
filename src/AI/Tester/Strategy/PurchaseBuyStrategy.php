@@ -76,7 +76,7 @@ class PurchaseBuyStrategy extends AbstractStrategy
     {
         $this->randomizer->reset();
         foreach ($buys as $buy) {
-            $priority = ($buy->rating >= 0)?$buy->rating:1;
+            $priority = ($buy->rating > 0)?$buy->rating:1;
             $this->randomizer->addVariant($buy, $priority);
         }
     }
