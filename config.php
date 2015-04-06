@@ -1,5 +1,11 @@
 <?php
-return [
+$localConfig = [];
+
+if (file_exists("config.local.php")) {
+    $localConfig = include "config.local.php";
+}
+
+return $localConfig + [
     'app.url' => 'http://symfony.fextbuy.local',
     'db.host' => '127.0.0.1',
     'db.database' => 'ai-tester',

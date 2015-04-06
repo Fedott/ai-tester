@@ -51,6 +51,8 @@ class ManagerCommand extends StoppableCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln("Manager start");
+
         $this->initEnvironment();
 
         $this->activityUpdate();
