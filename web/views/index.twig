@@ -3,6 +3,31 @@
     <div class="container">
         <table class="table table-striped table-hover">
             <thead>
+            <tr>
+                <th>Id</th>
+                <th>Workers</th>
+                <th>Last activity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for manager in managers%}
+                {% if manager.isOnline %}
+                    <tr>
+                        <th scope="row">{{ manager.id }}</th>
+                        <td>{{ manager.countWorkers }}</td>
+                        <td>{{ manager.lastActivity|date('c') }}</td>
+                        <td>
+                            <a href="/manager/sub/{{ manager.id }}/1" class="btn btn-warning">Sub</a>
+                            <a href="/manager/add/{{ manager.id }}/1" class="btn btn-success">Add</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
                     <th>Id</th>
                     <th>Status</th>

@@ -2,6 +2,7 @@
 <?php
 
 use AI\Tester\Command\CreateUserCommand;
+use AI\Tester\Command\ManagerCommand;
 use AI\Tester\Command\UserActionCommand;
 use AI\Tester\Command\UserInfoCommand;
 use AI\Tester\Command\RandomActionCommand;
@@ -26,6 +27,7 @@ $application->addCommands([
     new CreateUserCommand(),
     new UserActionCommand(),
     new WorkerCommand(),
+    new ManagerCommand(),
 ]);
 
 $application->addCommands(array(

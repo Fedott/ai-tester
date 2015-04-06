@@ -13,7 +13,7 @@ use Monolog\Logger;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class WorkerCommand extends Command
+class WorkerCommand extends StoppableCommand
 {
     /**
      * @var DocumentManager
@@ -40,11 +40,6 @@ class WorkerCommand extends Command
      */
     protected $worker;
 
-    /**
-     * @var bool
-     */
-    protected $stopSignal = false;
-
     protected function configure()
     {
         $this
@@ -62,7 +57,7 @@ class WorkerCommand extends Command
         $this->setWorkerStatus(Worker::STATUS_READY);
 
         while (1) {
-            pcntl_signal_dispatch();
+            $this->dispatchSignal();
             if ($this->stopSignal) {
                 $this->logger->addDebug("Stopping signal");
                 $output->writeln("Worker stopping");
@@ -101,19 +96,13 @@ class WorkerCommand extends Command
 
     protected function initEnvironment()
     {
-        pcntl_signal(SIGTERM, [$this, 'stopCommand']);
-        pcntl_signal(SIGINT, [$this, 'stopCommand']);
+        $this->initStopSignal();
 
         $this->logger = $this->getContainer()->get('logger.worker');
         $this->documentManager = $this->getDocumentManager();
         $this->workerRepository = $this->documentManager->getRepository(Worker::class);
         $this->strategyManager = $this->getStrategyManager();
         $this->worker = new Worker();
-    }
-
-    public function stopCommand()
-    {
-        $this->stopSignal = true;
     }
 
     /**

@@ -9,5 +9,6 @@ RUN echo "no" | pecl install mongo
 RUN echo "extension=mongo.so" > /etc/php5/mods-available/mongo.ini
 RUN ln -s ../../mods-available/mongo.ini /etc/php5/cli/conf.d/20-mongo.ini
 
-CMD ["/usr/bin/php", "/opt/project/bin/ai", "ai:worker"]
+WORKDIR /opt/project
+CMD ["/usr/bin/php", "./bin/ai", "ai:manager"]
 
