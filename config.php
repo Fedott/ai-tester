@@ -1,8 +1,8 @@
 <?php
 $localConfig = [];
 
-if (file_exists("config.local.php")) {
-    $localConfig = include "config.local.php";
+if (file_exists(__DIR__."/config.local.php")) {
+    $localConfig = include __DIR__."/config.local.php";
 }
 
 return $localConfig + [
@@ -109,3 +109,4 @@ return $localConfig + [
         ];
     }),
 ];
+
