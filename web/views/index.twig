@@ -16,7 +16,7 @@
                     <tr>
                         <th scope="row">{{ manager.id }}</th>
                         <td>{{ manager.countWorkers }}</td>
-                        <td>{{ manager.lastActivity|date('c') }}</td>
+                        <td>{{ manager.lastActivity }}</td>
                         <td>
                             <a href="/manager/sub/{{ manager.id }}/1" class="btn btn-warning">Sub</a>
                             <a href="/manager/add/{{ manager.id }}/1" class="btn btn-success">Add</a>
@@ -43,7 +43,7 @@
                         <tr>
                             <th scope="row">{{ worker.id }}</th>
                             <td>{{ worker.status }}</td>
-                            <td>{{ worker.lastActiveTime|date('c') }}</td>
+                            <td>{{ worker.lastActiveTime }}</td>
                             <td>{{ worker.countRuns }}</td>
                             <td>{{ worker.task }}</td>
                             <td>
