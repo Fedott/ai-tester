@@ -80,7 +80,11 @@ class WorkerCommand extends StoppableCommand
                 /** @var User $user */
                 list($strategy, $user) = $this->strategyManager->getRandomStrategy();
                 $this->logger->addDebug("Strategy for run", [$strategy, $user]);
-                $strategy->run($user);
+                try {
+                    $strategy->run($user);
+                } catch (\Exception $e) {
+                    $this->logger->addError("Strategy thrown Exception", [$e->getMessage(), $e]);
+                }
                 $this->logger->addDebug("Strategy done");
             } else {
                 $this->logger->addDebug("Wait task");

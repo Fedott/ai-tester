@@ -45,7 +45,7 @@ class Worker
      *
      * @var bool
      */
-    public $task = false;
+    public $task = true;
 
     /**
      * @ODM\Increment
