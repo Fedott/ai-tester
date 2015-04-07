@@ -54,20 +54,3 @@ function renderWorkers(data) {
 
     $("#workers tbody").html(tbody);
 }
-
-/**
- <tr>
- <th scope="row">{{ worker.id }}</th>
- <td>{{ worker.status }}</td>
- <td>{{ worker.lastActiveTime|date('c') }}</td>
- <td>{{ worker.countRuns }}</td>
- <td>{{ worker.task }}</td>
- <td>
- {% if worker.task %}
- <a href="/stop/{{ worker.id }}" class="btn btn-warning">Stop</a>
- {% else %}
- <a href="/start/{{ worker.id }}" class="btn btn-success">Start</a>
- {% endif %}
- </td>
- </tr>
- **/
