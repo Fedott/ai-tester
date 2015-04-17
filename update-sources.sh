@@ -10,4 +10,4 @@ sleep 1
 ${DOCKER_COMMAND} rm ai-manager
 ${DOCKER_COMMAND} build --tag=ai:sources docker/
 ${DOCKER_COMMAND} run --name=ai-sources ai:sources
-${DOCKER_COMMAND} run --name=ai-manager --link=ai-mongo-server:mongo --volumes-from=ai-sources -d ai:manager
+${DOCKER_COMMAND} run --name=ai-manager --volumes-from=ai-sources -d ai:manager
