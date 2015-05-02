@@ -20,6 +20,9 @@ return $localConfig + [
     'doctrine.hydratorDir' => __DIR__.'/cache/hydrators',
     'doctrine.hydratorNamespace' => 'Hydrators',
     'doctrine.documentClassesPath' => __DIR__.'/src/AI/Tester/Model',
+    'twig.templatesPath' => [
+        __DIR__ . '/src/AI/Manager/Resources/views',
+    ],
 
     'doctrine.documentManager' => DI\factory(function (DI\Container $c) {
         return \Doctrine\ODM\MongoDB\DocumentManager::create(
@@ -108,5 +111,7 @@ return $localConfig + [
             $c->get(\AI\Tester\Strategy\RegisterUserStrategy::class),
         ];
     }),
-];
 
+    Twig_Loader_Filesystem::class => DI\object(Twig_Loader_Filesystem::class)
+        ->constructor(DI\link('twig.templatesPath')),
+];
