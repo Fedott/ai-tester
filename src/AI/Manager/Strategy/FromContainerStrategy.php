@@ -26,7 +26,8 @@ class FromContainerStrategy implements StrategyInterface
     public function dispatch($controllerSection, array $vars)
     {
         $controller = $this->container->get($controllerSection[0]);
-        $response = $controller->$controllerSection[1];
+        $actionMethod = $controllerSection[1] . 'Action';
+        $response = $controller->$actionMethod();
 
         if ($response instanceof Response) {
             return $response;

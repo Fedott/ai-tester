@@ -114,4 +114,7 @@ return $localConfig + [
 
     Twig_Loader_Filesystem::class => DI\object(Twig_Loader_Filesystem::class)
         ->constructor(DI\link('twig.templatesPath')),
+    
+    Twig_Environment::class => DI\object(Twig_Environment::class)
+        ->constructor(DI\link(Twig_Loader_Filesystem::class)),
 ];

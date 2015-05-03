@@ -23,7 +23,7 @@ class ManagerController
     protected $container;
 
     /**
-     * @Inject
+     * @Inject("doctrine.documentManager")
      * @var DocumentManager
      */
     protected $documentManager;
@@ -44,16 +44,10 @@ class ManagerController
      */
     protected $twig;
 
-    public function __construct()
-    {
-        $this->workerRepository = $this->documentManager->getRepository(Worker::class);
-        $this->managerRepository = $this->documentManager->getRepository(Manager::class);
-    }
-
     public function indexAction()
     {
-        $workers = $this->workerRepository->findAll();
-        $managers = $this->managerRepository->findAll();
+        $workers = $this->getWorkerRepository()->findAll();
+        $managers = $this->getManagerRepository()->findAll();
 
         return new Response(
             $this->twig->render('index.twig', [
@@ -65,34 +59,34 @@ class ManagerController
 
     public function startAction($id)
     {
-        $worker = $this->workerRepository->find($id);
+        $worker = $this->getWorkerRepository()->find($id);
         $worker->task = true;
-        $this->workerRepository->getDocumentManager()->persist($worker);
-        $this->workerRepository->getDocumentManager()->flush();
+        $this->getWorkerRepository()->getDocumentManager()->persist($worker);
+        $this->getWorkerRepository()->getDocumentManager()->flush();
 
         return new RedirectResponse('/');
     }
 
     public function stopAction($id)
     {
-        $worker = $this->workerRepository->find($id);
+        $worker = $this->getWorkerRepository()->find($id);
         $worker->task = false;
-        $this->workerRepository->getDocumentManager()->persist($worker);
-        $this->workerRepository->getDocumentManager()->flush();
+        $this->getWorkerRepository()->getDocumentManager()->persist($worker);
+        $this->getWorkerRepository()->getDocumentManager()->flush();
 
         return new RedirectResponse('/');
     }
 
     public function changeCountWorkersAction($action, $id, $count)
     {
-        $manager = $this->managerRepository->find($id);
+        $manager = $this->getManagerRepository()->find($id);
         if ($action === 'sub') {
             $manager->countWorkers -= $count;
         } else {
             $manager->countWorkers += $count;
         }
-        $this->managerRepository->getDocumentManager()->persist($manager);
-        $this->managerRepository->getDocumentManager()->flush();
+        $this->getManagerRepository()->getDocumentManager()->persist($manager);
+        $this->getManagerRepository()->getDocumentManager()->flush();
 
         return new RedirectResponse('/');
     }
@@ -100,7 +94,7 @@ class ManagerController
     public function managersAction()
     {
         /** @var Manager[] $managers */
-        $managers = $this->managerRepository->findAll();
+        $managers = $this->getManagerRepository()->findAll();
         $data = [];
         foreach ($managers as $manager) {
             if ($manager->isOnline()) {
@@ -118,7 +112,7 @@ class ManagerController
     public function workersAction()
     {
         /** @var Worker[] $workers */
-        $workers = $this->workerRepository->findAll();
+        $workers = $this->getWorkerRepository()->findAll();
         $data = [];
         foreach ($workers as $worker) {
             if ($worker->isOnline()) {
@@ -133,5 +127,21 @@ class ManagerController
         }
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * @return DocumentRepository
+     */
+    protected function getWorkerRepository()
+    {
+        return $this->documentManager->getRepository(Worker::class);
+    }
+
+    /**
+     * @return DocumentRepository
+     */
+    protected function getManagerRepository()
+    {
+        return $this->documentManager->getRepository(Manager::class);
     }
 }

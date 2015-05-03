@@ -18,32 +18,41 @@ class Bootstrap
     protected $router;
 
     /**
-     * @Inject()
+     * @Inject
      * @var FromContainerStrategy
      */
     protected $strategy;
 
-    public function __construct()
+    /**
+     * @var bool
+     */
+    protected $initialized = false;
+
+    public function init()
     {
         $this->initRoutes();
     }
 
     protected function initRoutes()
     {
-        $this->router->get('/', [ManagerController::class, 'index'], $this->strategy);
-        $this->router->get('/start/{id}', [ManagerController::class, 'start'], $this->strategy);
-        $this->router->get('/stop/{id}', [ManagerController::class, 'stop'], $this->strategy);
+        $this->router->get('/', ManagerController::class . '::index', $this->strategy);
+        $this->router->get('/start/{id}', ManagerController::class . '::start', $this->strategy);
+        $this->router->get('/stop/{id}', ManagerController::class . '::stop', $this->strategy);
         $this->router->get(
             '/manager/{action}/{id}/{count}',
-            [ManagerController::class, 'changeCountWorkers'],
+            ManagerController::class . '::changeCountWorkers',
             $this->strategy
         );
-        $this->router->get('/managers/json', [ManagerController::class, 'managers'], $this->strategy);
-        $this->router->get('/workers/json', [ManagerController::class, 'workers'], $this->strategy);
+        $this->router->get('/managers/json', ManagerController::class . '::managers', $this->strategy);
+        $this->router->get('/workers/json', ManagerController::class . '::workers', $this->strategy);
     }
 
     public function dispatch()
     {
+        if (!$this->initialized) {
+            $this->init();
+        }
+
         $dispatcher = $this->router->getDispatcher();
 
         $request = $this->initRequest();
