@@ -8,9 +8,13 @@ User=core
 EnvironmentFile=/etc/environment-for-container
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill manager
+ExecStartPre=-/usr/bin/docker kill sources
 ExecStartPre=-/usr/bin/docker rm manager
+ExecStartPre=-/usr/bin/docker rm sources
 ExecStartPre=/usr/bin/docker pull fedot/fextbuy:ai-manager
-ExecStart=/usr/bin/docker run --name manager -e MONGODB_HOST=${MONGODB_HOST} fedot/fextbuy:ai-manager
+ExecStartPre=/usr/bin/docker pull fedot/fextbuy:ai-sources
+ExecStartPre=/usr/bin/docker run --name sources fedot/fextbuy:ai-sources
+ExecStart=/usr/bin/docker run --name manager -e MONGODB_HOST=${MONGODB_HOST} --volumes-from=sources fedot/fextbuy:ai-manager
 ExecStop=/usr/bin/docker stop manager
 
 [X-Fleet]
