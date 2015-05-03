@@ -13,6 +13,11 @@ class Worker
     const STATUS_WORK = 2;
     const STATUS_DOWN = 3;
 
+    protected static $onlineStatuses = [
+        self::STATUS_READY,
+        self::STATUS_WORK
+    ];
+
     /**
      * @ODM\Id
      * @var string
@@ -61,7 +66,9 @@ class Worker
 
     public function isOnline()
     {
-        if (time() - $this->lastActiveTime > 3) {
+        if (!in_array($this->status, static::$onlineStatuses)
+            || time() - $this->lastActiveTime > 30
+        ) {
             return false;
         }
 
