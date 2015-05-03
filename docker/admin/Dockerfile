@@ -14,3 +14,5 @@ EXPOSE 80
 WORKDIR /opt/project
 ENTRYPOINT ["/usr/bin/php"]
 
+CMD ["-S 0.0.0.0:80 -t web/ -r web/index.php"]
+

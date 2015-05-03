@@ -3,4 +3,4 @@ vendor
 cache/
 logs/
 docker/sources.tar.bz2
-config.local.php
+/config.local.php
