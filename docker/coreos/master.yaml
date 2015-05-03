@@ -1,0 +1,20 @@
+#cloud-config
+coreos:
+  units:
+    - name: media-mongo-data.mount
+      command: start
+      content: |
+        [Mount]
+        What=/dev/disk/by-id/scsi-0Google_PersistentDisk_ai-tester-mongo-drive-part1
+        Where=/media/mongo/data
+        Type=ext4
+write_files:
+  - path: /home/core/.dockercfg
+    owner: core
+    content: |
+      {
+        "https://index.docker.io/v1/": {
+          "email": "fedotru@gmail.com",
+          "auth": "ZmVkb3Q6WkVOSVRESg=="
+        }
+      }
