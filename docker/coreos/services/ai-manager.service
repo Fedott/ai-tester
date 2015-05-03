@@ -1,0 +1,17 @@
+[Unit]
+Description=AI manager service
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=core
+EnvironmentFile=/etc/environment-for-container
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill manager
+ExecStartPre=-/usr/bin/docker rm manager
+ExecStartPre=/usr/bin/docker pull fedot/fextbuy:ai-manager
+ExecStart=/usr/bin/docker run --name manager -e MONGODB_HOST=${MONGODB_HOST} fedot/fextbuy:ai-manager
+ExecStop=/usr/bin/docker stop manager
+
+[X-Fleet]
+MachineMetadata=role=worker

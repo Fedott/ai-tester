@@ -32,6 +32,11 @@ write_files:
       # configure fleetctl to work with our etcd servers set above
       export FLEETCTL_ENDPOINT=unix:///var/run/fleet.sock
       export FLEETCTL_EXPERIMENTAL_API=true
+  - path: /etc/environment-for-container
+    permissions: 0644
+    owner: core
+    content: |
+      MONGODB_HOST="10.240.20.133"
   - path: /home/core/.dockercfg
     owner: core
     content: |

@@ -9,7 +9,7 @@ TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill mongo
 ExecStartPre=-/usr/bin/docker rm mongo
 ExecStartPre=/usr/bin/docker pull fedot/fextbuy:ai-mongo
-ExecStart=/usr/bin/docker run --name mongo -v /media/mongo/data:/data/db fedot/fextbuy:ai-mongo
+ExecStart=/usr/bin/docker run --name mongo -v /media/mongo/data:/data/db -p 27017:27017 fedot/fextbuy:ai-mongo
 ExecStop=/usr/bin/docker stop mongo
 
 [X-Fleet]

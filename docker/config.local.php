@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'app.url' => 'http://staging.api.fextbuy.ru/',
-    'db.host' => '10.240.194.126',
+    'app.url' => 'http://api.cloud.fextbuy.ru/',
+    'db.host' => getenv("MONGODB_HOST"),
 ];
